@@ -18,7 +18,45 @@ function handleSubmit(event) {
     checkForName(formText);
     
     // Check if the URL is valid
- 
+    function isValidUrl(urlString) {
+        const urlPattern = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/;
+        return urlPattern.test(urlString);
+      }
+
+      let url = formText;
+      if (isValidUrl(url)) {
+        fetch(serverURL, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ url: url })
+          }).catch(error => {
+            console.error('Error:', error);
+            // Handle errors, e.g., display an error message to the user   
+        
+          }).then(data => {
+            console.log('Server response:', data);   
+      
+            const resultDiv = document.getElementById('result');
+
+                // Clear any previous content
+                resultDiv.innerHTML = '';
+
+                // Append data to the result div
+                const polarity = data.sentiment.polarity;
+                const subjectivity = data.sentiment.subjectivity;
+                const textSnippet = data.sentence_list[0].text;
+
+                resultDiv.innerHTML += `
+                    <p>Polarity: ${polarity}</p>
+                    <p>Subjectivity: ${subjectivity}</p>
+                    <p>Text Snippet: ${textSnippet}</p>
+                `;
+          })
+      } else {
+        console.log("Invalid URL");
+      }
         // If the URL is valid, send it to the server using the serverURL constant above
       
 }

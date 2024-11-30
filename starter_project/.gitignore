@@ -1,0 +1,15 @@
+# Operating system files
+node_modules/
+*.log
+*.DS_Store
+
+# Build artifacts
+dist/
+build/
+
+# IDE files
+.idea/
+.vscode/
+
+# Environment variables
+process.env
